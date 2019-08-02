@@ -32,30 +32,6 @@ extern POBJECT_TYPE *IoDriverObjectType;
 
 int g_KeyCount = 0;
 
-//IRP取消方法
-BOOLEAN CancelIrp(PIRP pIrp)
-{
-	if (pIrp == NULL)
-	{
-		DbgPrint("cancel irp error.../n");
-		return FALSE;
-	}
-	if (pIrp->Cancel || pIrp->CancelRoutine == NULL)
-	{
-		DbgPrint("cancel irp error.../n");
-		return FALSE;
-	}
-	if (FALSE == IoCancelIrp(pIrp))
-	{
-		DbgPrint("IoCancelIrp to irp error.../n");
-		return FALSE;
-	}
-
-	//取消后重设此例为空
-	IoSetCancelRoutine(pIrp, NULL);
-	return TRUE;
-}
-
 //解除绑定
 NTSTATUS DeAttach(PDEVICE_OBJECT pdevice)
 {
