@@ -1,0 +1,86 @@
+;
+; Dirver.inf
+;
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=Sample ; TODO: edit Class
+ClassGuid={78A1C341-4539-11d3-B88D-00C04FAD5171} ; TODO: edit ClassGuid
+Provider=%ManufacturerName%
+CatalogFile=Dirver.cat
+DriverVer= ; TODO: set DriverVer in stampinf property pages
+
+[DestinationDirs]
+DefaultDestDir = 12
+Dirver_Device_CoInstaller_CopyFiles = 11
+
+; ================= Class section =====================
+
+[ClassInstall32]
+Addreg=SampleClassReg
+
+[SampleClassReg]
+HKR,,,0,%ClassName%
+HKR,,Icon,,-5
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+Dirver.sys  = 1,,
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll=1 ; make sure the number matches with SourceDisksNames
+
+;*****************************************
+; Install Section
+;*****************************************
+
+[Manufacturer]
+%ManufacturerName%=Standard,NT$ARCH$
+
+[Standard.NT$ARCH$]
+%Dirver.DeviceDesc%=Dirver_Device, Root\Dirver ; TODO: edit hw-id
+
+[Dirver_Device.NT]
+CopyFiles=Drivers_Dir
+
+[Drivers_Dir]
+Dirver.sys
+
+;-------------- Service installation
+[Dirver_Device.NT.Services]
+AddService = Dirver,%SPSVCINST_ASSOCSERVICE%, Dirver_Service_Inst
+
+; -------------- Dirver driver install sections
+[Dirver_Service_Inst]
+DisplayName    = %Dirver.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\Dirver.sys
+
+;
+;--- Dirver_Device Coinstaller installation ------
+;
+
+[Dirver_Device.NT.CoInstallers]
+AddReg=Dirver_Device_CoInstaller_AddReg
+CopyFiles=Dirver_Device_CoInstaller_CopyFiles
+
+[Dirver_Device_CoInstaller_AddReg]
+HKR,,CoInstallers32,0x00010000, "WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll,WdfCoInstaller"
+
+[Dirver_Device_CoInstaller_CopyFiles]
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll
+
+[Dirver_Device.NT.Wdf]
+KmdfService =  Dirver, Dirver_wdfsect
+[Dirver_wdfsect]
+KmdfLibraryVersion = $KMDFVERSION$
+
+[Strings]
+SPSVCINST_ASSOCSERVICE= 0x00000002
+ManufacturerName="<Your manufacturer name>" ;TODO: Replace with your manufacturer name
+ClassName="Samples" ; TODO: edit ClassName
+DiskName = "Dirver Installation Disk"
+Dirver.DeviceDesc = "Dirver Device"
+Dirver.SVCDESC = "Dirver Service"
