@@ -27,5 +27,11 @@
     <ClCompile Include="keyboardfilter.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="simulateFile.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomComm.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

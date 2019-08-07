@@ -59,7 +59,7 @@ NTSTATUS DriverUnload(PDRIVER_OBJECT pDriver)
 {
 	PDEVICE_OBJECT pDevice;
 	PDEV_EXTENSION devExt;
-
+	
 	UNREFERENCED_PARAMETER(pDriver);
 	DbgPrint("DriverEntry Unloading...\n");
 	LARGE_INTEGER lDelay;
