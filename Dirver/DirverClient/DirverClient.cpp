@@ -6,12 +6,24 @@
 #include <windows.h>
 #include <stdio.h>
 #include <winioctl.h>
+
+//#define		BUFFERREAD_IO
+#define		DIRECT_IO
+#define IO_CONTROL
+
+#ifdef BUFFERREAD_IO
 #define CTL_TEST	CTL_CODE(FILE_DEVICE_UNKNOWN,\
 							 0x8000,\
 							 METHOD_BUFFERED,\
 							 FILE_ANY_ACCESS)
+#endif
 
-#define IO_CONTROL
+#ifdef DIRECT_IO
+#define CTL_TEST	CTL_CODE(FILE_DEVICE_UNKNOWN,\
+							 0x8000,\
+							 METHOD_IN_DIRECT,\
+							 FILE_ANY_ACCESS)
+#endif
 
 void FileOption(HANDLE hDevice)
 {

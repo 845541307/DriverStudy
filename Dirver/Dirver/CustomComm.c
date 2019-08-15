@@ -1,5 +1,9 @@
 ﻿#include <ntddk.h>
 
+
+//#define		BUFFERREAD_IO
+#define		DIRECT_IO
+
 /*
 CTL_CODE(DeviceType, Function, Method, Access)
 DeviceType:设备对象的类型,这个类型应和创建设备IoCreateDevice时的类型相匹配。
@@ -15,10 +19,19 @@ Method:这个是操作模式,可以是下列四种模式之一。
 Access:访问权限,如果没有特殊要求,一般使用FILE_ANY_ACCESS。
 */
 
+#ifdef BUFFERREAD_IO
 #define CTL_TEST	CTL_CODE(FILE_DEVICE_UNKNOWN,\
 							 0x8000,\
 							 METHOD_BUFFERED,\
 							 FILE_ANY_ACCESS)
+#endif
+
+#ifdef DIRECT_IO
+#define CTL_TEST	CTL_CODE(FILE_DEVICE_UNKNOWN,\
+							 0x8000,\
+							 METHOD_IN_DIRECT,\
+							 FILE_ANY_ACCESS)
+#endif
 
 
 #define		DEVICE_NAME				TEXT("\\Device\\MyFileDevice")
@@ -66,6 +79,7 @@ NTSTATUS CommonDispatch(
 	return status;
 }
 
+#ifdef BUFFERREAD_IO
 NTSTATUS IoControlDispatch(
 	IN PDEVICE_OBJECT pDeviceObj,
 	IN PIRP pIrp)
@@ -99,6 +113,39 @@ NTSTATUS IoControlDispatch(
 	IoCompleteRequest(pIrp, IO_NO_INCREMENT);
 	return status;
 }
+#endif
+
+#ifdef DIRECT_IO
+NTSTATUS IoControlDispatch(
+	IN PDEVICE_OBJECT pDeviceObj,
+	IN PIRP pIrp)
+{
+	NTSTATUS status = STATUS_SUCCESS;
+	PIO_STACK_LOCATION pStack = IoGetCurrentIrpStackLocation(pIrp);
+	ULONG	uInputSize = pStack->Parameters.DeviceIoControl.InputBufferLength;
+	ULONG	uOutPutSize = pStack->Parameters.DeviceIoControl.OutputBufferLength;
+	ULONG	uInfoSize = 0;
+	switch (pStack->Parameters.DeviceIoControl.IoControlCode)
+	{
+	case CTL_TEST:
+		PUCHAR inputBuffer = pIrp->AssociatedIrp.SystemBuffer;
+		for (int i = 0; i < uInputSize; i++)
+		{
+			KdPrint(("why::inbuff data is : %X\n", inputBuffer[i]));
+		}
+		PUCHAR outputBuffer = MmGetSystemAddressForMdlSafe(pIrp->MdlAddress, NormalPagePriority);
+		memset(outputBuffer, 0xDD, uOutPutSize);
+		uInfoSize = uOutPutSize;
+		break;
+	}
+
+	pIrp->IoStatus.Status = status;
+	pIrp->IoStatus.Information = uInfoSize;
+	IoCompleteRequest(pIrp, IO_NO_INCREMENT);
+
+	return status;
+}
+#endif
 
 NTSTATUS CreateDevice(IN PDRIVER_OBJECT pDriverObject)
 {
@@ -123,7 +170,13 @@ NTSTATUS CreateDevice(IN PDRIVER_OBJECT pDriverObject)
 		return status;
 	}
 
+#ifdef BUFFERREAD_IO
 	pDeviceObject->Flags |= DO_BUFFERED_IO;
+#endif
+
+#ifdef DIRECT_IO
+	pDeviceObject->Flags |= DO_DIRECT_IO;
+#endif
 
 
 	deviceExten = (pDEVICE_EXTENSION)pDeviceObject->DeviceExtension;
