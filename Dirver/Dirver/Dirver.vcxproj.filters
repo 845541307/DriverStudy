@@ -33,5 +33,20 @@
     <ClCompile Include="CustomComm.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="HelloWDM.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="List.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Lookaside.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="try_except.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="string.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
