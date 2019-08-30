@@ -7,9 +7,10 @@
 #include <stdio.h>
 #include <winioctl.h>
 
-//#define		BUFFERREAD_IO
-#define		DIRECT_IO
-#define IO_CONTROL
+#define		BUFFERREAD_IO
+//#define		DIRECT_IO
+//#define IO_CONTROL
+#define	FILE_CONTROL
 
 #ifdef BUFFERREAD_IO
 #define CTL_TEST	CTL_CODE(FILE_DEVICE_UNKNOWN,\
@@ -29,9 +30,9 @@ void FileOption(HANDLE hDevice)
 {
 	UCHAR buffer[10];
 	memset(buffer, 0xBB, 10);
+	BOOL bRet;
 	ULONG ulRead;
 	ULONG ulWrite;
-	BOOL bRet;
 	bRet = WriteFile(hDevice, buffer, 10, &ulWrite, NULL);
 	if (bRet)
 	{
@@ -56,7 +57,7 @@ void FileOption(HANDLE hDevice)
 int main()
 {
 	HANDLE hDevice =
-		CreateFile(L"\\\\.\\FileDeviceLink",
+		CreateFile(L"\\\\.\\ThreadDevice",
 			GENERIC_READ | GENERIC_WRITE,
 			0,		// share mode none
 			NULL,	// no security
@@ -72,7 +73,7 @@ int main()
 		return 1;
 	}
 
-
+#ifdef IO_CONTROL
 	UCHAR InputBuffer[10];
 	UCHAR OutputBuffer[10];
 	//将输入缓冲区全部置成0XBB
@@ -91,8 +92,9 @@ int main()
 		}
 		printf("\n");
 	}
+#endif
 
-#ifndef IO_CONTROL
+#ifdef FILE_CONTROL
 	FileOption(hDevice);
 #endif
 

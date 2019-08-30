@@ -22,7 +22,7 @@ VOID stringInit()
 		//改变pwc
 		try
 		{
-			ProbeForWrite(pwc, 2 * wcslen(pwc), 4);
+			ProbeForWrite(pwc, 2 * wcslen(pwc), 4); //WHCAR* CHAR*变量不可写
 			for (int i = 0; i < wcslen(pwc); i++)
 			{
 				pwc[i] = TEXT('1');

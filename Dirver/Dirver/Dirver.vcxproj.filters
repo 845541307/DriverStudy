@@ -24,28 +24,25 @@
     </Inf>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="keyboardfilter.c">
+    <ClCompile Include="try_except.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="simulateFile.c">
+    <ClCompile Include="string.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CustomComm.c">
+    <ClCompile Include="file.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="regedit.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="HelloWDM.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="List.c">
+    <ClCompile Include="simulateFile.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Lookaside.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="try_except.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="string.c">
+    <ClCompile Include="thread.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

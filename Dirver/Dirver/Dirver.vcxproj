@@ -155,13 +155,12 @@
     <FilesToPackage Include="$(TargetPath)" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CustomComm.c" />
+    <ClCompile Include="file.c" />
     <ClCompile Include="HelloWDM.c" />
-    <ClCompile Include="keyboardfilter.c" />
-    <ClCompile Include="List.c" />
-    <ClCompile Include="Lookaside.c" />
+    <ClCompile Include="regedit.c" />
     <ClCompile Include="simulateFile.c" />
     <ClCompile Include="string.c" />
+    <ClCompile Include="thread.c" />
     <ClCompile Include="try_except.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
