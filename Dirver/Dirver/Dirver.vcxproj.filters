@@ -27,22 +27,28 @@
     <ClCompile Include="try_except.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="string.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="file.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="regedit.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="HelloWDM.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="simulateFile.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="thread.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="kernelToAppEvent.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SpinLockSync.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="List.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="irpAsyncComm.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StartIo.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IOTimer.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DPCTimer.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

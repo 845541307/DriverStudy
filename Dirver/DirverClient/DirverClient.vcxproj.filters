@@ -26,5 +26,23 @@
     <ClCompile Include="DirverClient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="appToKernelComm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SpinLockClient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="testC.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AsyncClient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StartIoClient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TimerClient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

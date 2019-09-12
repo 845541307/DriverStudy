@@ -8,56 +8,54 @@
 //#include <winioctl.h>
 //
 //#define		BUFFERREAD_IO
-////#define		DIRECT_IO
-////#define IO_CONTROL
-////#define	FILE_CONTROL
+//#define		IO_CONTROL
+//
 //
 //#ifdef BUFFERREAD_IO
-//#define CTL_TEST	CTL_CODE(FILE_DEVICE_UNKNOWN,\
+//#define CTL_SPIN_LOCK	CTL_CODE(FILE_DEVICE_UNKNOWN,\
 //							 0x8000,\
 //							 METHOD_BUFFERED,\
 //							 FILE_ANY_ACCESS)
 //#endif
 //
-//#ifdef DIRECT_IO
-//#define CTL_TEST	CTL_CODE(FILE_DEVICE_UNKNOWN,\
-//							 0x8000,\
-//							 METHOD_IN_DIRECT,\
-//							 FILE_ANY_ACCESS)
-//#endif
-//
-//void FileOption(HANDLE hDevice)
+//DWORD WaitKernelEventThd(
+//	LPVOID lpThreadParameter
+//)
 //{
-//	UCHAR buffer[10];
-//	memset(buffer, 0xBB, 10);
+//	HANDLE hDevice = *(HANDLE*)lpThreadParameter;
+//
+//#ifdef IO_CONTROL
+//	UCHAR InputBuffer[10];
+//	UCHAR OutputBuffer[10];
+//	//将输入缓冲区全部置成0XBB
+//	memset(InputBuffer, 0xAA, 10);
+//	DWORD dwOutput;
+//	//输入缓冲区作为输入，输出缓冲区作为输出
+//
 //	BOOL bRet;
-//	ULONG ulRead;
-//	ULONG ulWrite;
-//	bRet = WriteFile(hDevice, buffer, 10, &ulWrite, NULL);
+//	bRet = DeviceIoControl(hDevice, CTL_SPIN_LOCK, &InputBuffer, 10, &OutputBuffer, 10, &dwOutput, NULL);
 //	if (bRet)
 //	{
-//		printf("Write %d bytes\n", ulWrite);
-//	}
-//
-//	bRet = ReadFile(hDevice, buffer, 10, &ulRead, NULL);
-//	if (bRet)
-//	{
-//		printf("Read %d bytes:", ulRead);
-//		for (int i = 0; i < (int)ulRead; i++)
+//		printf("thread id is %d, Output buffer:%d bytes\n", GetCurrentThreadId(), dwOutput);
+//		for (int i = 0; i < (int)dwOutput; i++)
 //		{
-//			printf("%02X ", buffer[i]);
+//			printf("%02X ", OutputBuffer[i]);
 //		}
-//
 //		printf("\n");
 //	}
-//
-//	printf("file length:%d\n", GetFileSize(hDevice, NULL));
+//	else
+//	{
+//		printf("Device Io control call failed, error is %d\n", GetLastError());
+//	}
+//#endif
+//	return 0;
 //}
 //
 //int main()
 //{
+//	//Sleep(15 * 1000);
 //	HANDLE hDevice =
-//		CreateFile(L"\\\\.\\ThreadDevice",
+//		CreateFile(L"\\\\.\\SpinLockSyncDevice",
 //			GENERIC_READ | GENERIC_WRITE,
 //			0,		// share mode none
 //			NULL,	// no security
@@ -73,37 +71,39 @@
 //		return 1;
 //	}
 //
-//#ifdef IO_CONTROL
-//	UCHAR InputBuffer[10];
-//	UCHAR OutputBuffer[10];
-//	//将输入缓冲区全部置成0XBB
-//	memset(InputBuffer, 0xBB, 10);
-//	DWORD dwOutput;
-//	//输入缓冲区作为输入，输出缓冲区作为输出
-//
-//	BOOL bRet;
-//	bRet = DeviceIoControl(hDevice, CTL_TEST, InputBuffer, 10, &OutputBuffer, 10, &dwOutput, NULL);
-//	if (bRet)
+//	HANDLE hEvent = NULL;
+//	DWORD  dwThdId = 0;
+//	HANDLE hThdArr[2] = {NULL};
+//	for (int i = 0; i < 2; i++)
 //	{
-//		printf("Output buffer:%d bytes\n", dwOutput);
-//		for (int i = 0; i < (int)dwOutput; i++)
-//		{
-//			printf("%02X ", OutputBuffer[i]);
-//		}
-//		printf("\n");
+//		hThdArr[i] = CreateThread(NULL,
+//			0,
+//			WaitKernelEventThd,
+//			(LPVOID)&hDevice,
+//			0,
+//			&dwThdId);
 //	}
-//#endif
 //
-//#ifdef FILE_CONTROL
-//	FileOption(hDevice);
-//#endif
+//	DWORD status = WaitForMultipleObjects(2, hThdArr, TRUE, INFINITE);
 //
+//	if (status == WAIT_OBJECT_0)
+//	{
+//		printf("wait all thread exit\n");
+//	}
+//	else {
+//		printf("wait for multiple err is %d\n", GetLastError());
+//	}
 //
+//	for (auto handleItem : hThdArr)
+//	{
+//		CloseHandle(handleItem);
+//	}
+//	
 //	CloseHandle(hDevice);
 //	std::cout << "Hello World!\n";
 //	system("pause");
 //	return 0;
-//   
+//
 //}
 //
 //// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
